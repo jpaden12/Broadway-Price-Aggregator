@@ -1,0 +1,27 @@
+.wrapper-box {
+    height: 10vh;
+    align-content: center;
+    text-align: center;
+    background-color: #99e6ff;
+    color: white;
+    top: 0;
+    vertical-align: top;
+    width: 100%;
+}
+
+.title {
+    font-weight: normal;
+    /* font-size: 2em; */
+    /* text-align: left; */
+    /* padding-left: 10%; */
+    /* background-color: aqua; */
+    text-align: center;
+    display: inline-block;
+}
+
+.nav-buttons {
+    text-align: center;
+    display: inline-block;
+    margin-left: 5%;
+    margin-right: 5%;
+}

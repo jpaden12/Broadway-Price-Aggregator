@@ -1,0 +1,13 @@
+.title-wrapper {
+    text-align: center;
+
+}
+
+.allshowstitle {
+    font-weight: normal;
+    font-size: 50px;
+}
+
+#root {
+    width: 100%;
+}
