@@ -10,28 +10,28 @@ export class PriceListing {
     id?: number;
 
     @ManyToOne(() => ShowInfo, {index: 'show_id'})
-    show_id!: ShowInfo; 
+    show_id?: ShowInfo; 
 
     @Property({ nullable: true}) 
     show_name?: string;
 
     @Property() 
-    site_name!: string;
+    site_name?: string;
 
     @Property({ type: DecimalType, precision: 10, scale: 2})
-    price!: string;
+    price?: string;
 
     @Property({ nullable: true})
     show_date_time?: Date
 
     @Property()
-    show_time_period!: ShowTime
+    show_time_period?: ShowTime
 
     @Property({ type: 'datetime'})
-    date_of_capture!: Date
+    date_of_capture?: Date
 
     @Property()
-    fixed!: boolean
+    fixed?: boolean
 
     @Property({ nullable: true})
     notes?: string

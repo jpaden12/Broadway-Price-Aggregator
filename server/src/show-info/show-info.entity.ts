@@ -7,42 +7,42 @@ import { PriceListing } from "../price-listing/price-listing.entity";
 @Entity()
 export class ShowInfo {
 
-    @PrimaryKey()
-    id?: number; 
+  @PrimaryKey()
+  id?: number;
 
-    @Property()
-    show_name!: string;
+  @Property()
+  show_name!: string;
 
-    @OneToMany(() => PriceListing, price_listing => price_listing.show_id)
-    price_listings? = new Collection<PriceListing>(this);
+  @OneToMany(() => PriceListing, price_listing => price_listing.show_id)
+  price_listings? = new Collection<PriceListing>(this);
 
-    @Property()
-    venue!: string;
+  @Property()
+  venue!: string;
 
-    @Property()
-    address!: string;
+  @Property()
+  address!: string;
 
-    @Property()
-    website!: string;
+  @Property()
+  website!: string;
 
-    @Enum(() => ShowType)
-    type!: ShowType;
+  @Enum(() => ShowType)
+  type!: ShowType;
     
-    @Enum(() => ShowLevel)
-    level!: ShowLevel;
+  @Enum(() => ShowLevel)
+  level!: ShowLevel;
 
-    @Property({ nullable: true})
-    runtime?: number;
+  @Property({ nullable: true})
+  runtime?: number;
 
-    @Property()
-    opening_date!: Date;
+  @Property()
+  opening_date!: Date;
 
-    @Property({ nullable: true})
-    closing_date?: Date;
+  @Property({ nullable: true })
+  closing_date?: Date;
 
-    @Property()
-    closed!: boolean;
+  @Property()
+  closed!: boolean;
 
-    @Property({ default: false})
-    display!: boolean;
+  @Property({ default: false })
+  display!: boolean;
 }

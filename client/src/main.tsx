@@ -6,6 +6,6 @@ import AllShows from './pages/AllShows/AllShows.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Main />
+    <AllShows />
   </StrictMode>,
 )

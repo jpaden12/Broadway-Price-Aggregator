@@ -1,8 +1,8 @@
-import { MikroOrmModule } from "@mikro-orm/nestjs";
-import { ShowInfoController } from "./show-info.controller";
-import { ShowInfoService } from "./show-info.service";
-import { ShowInfo } from "./show-info.entity";
-import { Module } from "@nestjs/common";
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { ShowInfoController } from './show-info.controller';
+import { ShowInfoService } from './show-info.service';
+import { ShowInfo } from './show-info.entity';
+import { Module } from '@nestjs/common';
 
 
 @Module({

@@ -12,4 +12,6 @@ import { PriceListingService } from "./price-listing.service";
     exports: [PriceListingService]
 })
 
-export class PriceListingModule {}
+export class PriceListingModule {
+    
+}

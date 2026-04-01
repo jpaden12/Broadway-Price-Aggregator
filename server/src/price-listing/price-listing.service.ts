@@ -2,15 +2,11 @@ import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
 import { PriceListing } from "./price-listing.entity";
 import { PriceListingRepository } from "./price-listing.repository";
-// import { ShowTime } from "src/show-info/types";
-import { EntityManager } from "@mikro-orm/postgresql";
+import { EntityManager, LoadedReference, QueryOrder } from "@mikro-orm/postgresql";
 import { ShowInfo } from "src/show-info/show-info.entity";
-import { ShowLevel, ShowTime } from "src/show-info/types";
+import { ShowLevel } from "src/show-info/types";
 import { PriceListingtDto } from "./price-listing.dto";
-
-
-
-
+import { PriceListing as ListingType } from "src/show-info/types";
 
 
 @Injectable()
@@ -58,13 +54,22 @@ export class PriceListingService {
     }
 
     async deletePriceListing(id: number): Promise<boolean> {
-        const listingRef = this.em.getReference(PriceListing, id);
+        const listingRef: PriceListing = this.em.getReference(PriceListing, id);
 
-        await this.em.remove(listingRef);
-        this.em.flush();
+        this.em.remove(listingRef);
+        await this.em.flush();
         return true;
     }
 
-
- 
+    async cheapestPriceShow(showId: number): Promise<PriceListing | null> {
+        const cheapestListing = await this.em.find(PriceListing,
+        {
+            show_id: showId
+        },
+        {
+            limit: 1,
+            orderBy: { price: 'ASC'}
+        });
+        return cheapestListing[0];
+    }
 }

@@ -32,6 +32,7 @@ export class ShowInfoController {
     
     @Patch('UpdateShow/:id')
     async updateShow(@Param('id') id: number, @Body() body: object): Promise<ShowInfo> {
+        console.log(body)
         return await this.showInfoService.updateShow(id, body);
     }
 }

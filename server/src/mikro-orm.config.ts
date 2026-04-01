@@ -2,8 +2,6 @@ import { defineConfig } from "@mikro-orm/core";
 import { Migrator } from "@mikro-orm/migrations";
 import { PostgreSqlDriver } from "@mikro-orm/postgresql";
 import { SqlHighlighter } from "@mikro-orm/sql-highlighter";
-import { ShowInfo } from "./show-info/show-info.entity";
-import { PriceListing } from "./price-listing/price-listing.entity";
 
 
 export default defineConfig({
