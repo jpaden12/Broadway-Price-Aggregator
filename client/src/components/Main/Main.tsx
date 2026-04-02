@@ -179,10 +179,10 @@ function Main() {
                         paddingBottom: '1%',
                         paddingTop: '1%'
                     }}>
+                        {/* // Replace wit Broadway and Off Broadway */}
                         <div className="categories">Categories</div>
                         <ToggleButtonGroup
                             value={categories}
-                            exclusive
                             size='large'
                             sx={{ 
                                 mr: 2 
@@ -336,7 +336,6 @@ function Main() {
                         </Grid>
                         <Grid size={0.5}></Grid>
                     </Grid>
-                    
                 </Box>
 
                 {/* // Footer - 10%  */}
