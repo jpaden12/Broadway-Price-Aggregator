@@ -52,29 +52,35 @@ const allShows: object[] = [
 
 function AllShows() {
     const [categories, setCategories] = React.useState(() => ['Play']);
+    console.log("Initial categories: " + categories);
     const [currentShows, setCurrentShows] = React.useState(() => allShows);
 
     const changeCategories = (
             event: React.MouseEvent<HTMLElement>,
             newCategories: string[],
         ) => {
+            // console.log("New categories after click: " + newCategories);
+            
             setCategories(newCategories);
-            updateShows(categories)
-            console.log(categories)
+            updateShows(newCategories)
         };
     
     const numbers = [1, 2, 3, 4];
 
     const updateShows = (categories: string[]) => {
-        if (categories.length == 0 || categories.length == 3) {
+        console.log(categories);
+
+        if (categories.length == 0 || categories.length == 2) {
             setCurrentShows(allShows)
         } else {
             const newShows = allShows.filter((show) => {
-                return show.type == categories[1];
-            })
+                console.log("Type: " + show.type);
+                return show.type == categories[0];
+            });
             setCurrentShows(newShows);
+            console.log("Current shows: " + newShows)
         }
-        // console.log(currentShows);
+       
         
     }
 
