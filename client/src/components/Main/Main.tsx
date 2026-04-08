@@ -98,7 +98,7 @@ function Main() {
 
                     
                 {/* // Header Navbar - 10% of page */}
-                <Header></Header>
+                {/* <Header></Header> */}
 
                 <Divider orientation='horizontal' sx={{
                     color: 'black'

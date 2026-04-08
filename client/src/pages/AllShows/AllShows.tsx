@@ -51,8 +51,8 @@ const allShows: object[] = [
 ];
 
 function AllShows() {
-    const [categories, setCategories] = React.useState(() => ['Play']);
-    console.log("Initial categories: " + categories);
+    const [categories, setCategories] = React.useState(() => ['Play', 'Musical']);
+    // console.log("Initial categories: " + categories);
     const [currentShows, setCurrentShows] = React.useState(() => allShows);
 
     const changeCategories = (
@@ -64,21 +64,16 @@ function AllShows() {
             setCategories(newCategories);
             updateShows(newCategories)
         };
-    
-    const numbers = [1, 2, 3, 4];
 
     const updateShows = (categories: string[]) => {
-        console.log(categories);
 
         if (categories.length == 0 || categories.length == 2) {
             setCurrentShows(allShows)
         } else {
             const newShows = allShows.filter((show) => {
-                console.log("Type: " + show.type);
                 return show.type == categories[0];
             });
             setCurrentShows(newShows);
-            console.log("Current shows: " + newShows)
         }
        
         
@@ -88,9 +83,9 @@ function AllShows() {
     return (
         <div>
             {/* Header Navbar - 10% of page */}
-            <Header></Header>
+            {/* <Header></Header> */}
 
-            {/* Title and Selection Buttons - 20% of page */} 
+            {/* Title and Selection Buttons - 25% of page */} 
             <Container
                 maxWidth={false}
                 style={{
@@ -113,7 +108,10 @@ function AllShows() {
                         sx={{ 
                             width: 170,
                             backgroundColor: 'white', 
-                            border: '3px solid #99e6ff'
+                            border: '3px solid #99e6ff',
+                            '&: hover': {
+                                border: '3px solid #99e6ff'
+                            }
                         }}>
                         <TheaterComedyIcon />
                         Play
@@ -124,7 +122,10 @@ function AllShows() {
                         sx={{ 
                             width: 170,
                             backgroundColor: 'white',
-                            border: '3px solid #99e6ff'
+                            border: '3px solid #99e6ff',
+                            '&: hover': {
+                                border: '3px solid #99e6ff'
+                            }
                         }}>
                         <MusicNoteIcon />
                         Musical
@@ -135,7 +136,8 @@ function AllShows() {
             {/* Grid - 55% of page */} 
             <div style={{
                 backgroundColor: '#e6e6e6',
-                // height: '70vh'
+                height: 'fit-content',
+                minHeight: '50vh',
                 textAlign: 'center',
             }}>
                 <Grid container spacing={0.4}>
@@ -172,7 +174,11 @@ function AllShows() {
                 height: '10vh'
             }}></div>
 
-            {/* Footer 10% of page */} 
+            {/* Footer 5% of page */} 
+            <div style={{
+                backgroundColor: '#e6e6e6',
+                height: '5vh'
+            }}></div>
         </div>
     )
 }
