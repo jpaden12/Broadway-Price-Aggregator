@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Container, Divider, Grid, IconButton, InputAdornment, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Autocomplete, Box, Button, ButtonGroup, Container, Divider, Grid, IconButton, InputAdornment, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import type { GridColDef, GridRowsProp } from '@mui/x-data-grid';
 import { DataGrid } from '@mui/x-data-grid';
 import { TextField } from '@mui/material';
@@ -11,11 +11,12 @@ import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 import UpdateIcon from '@mui/icons-material/Update';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import SearchIcon from '@mui/icons-material/Search';
+import ClearIcon from '@mui/icons-material/Clear';
+
 import './Main.css';
 import React from 'react';
-import { theme } from '../../assets/theme';
 import { getListings } from '../../api-layer/fetch-logic';
-import Header from '../Header/Header';
+import { ShowType } from '../../api-layer/types';
 
 
 
@@ -40,18 +41,27 @@ const shows = [
   {
     value: 'Chicago',
     label: 'Chicago',
+    type: ShowType.MUSICAL,
   },
   {
     value: 'Ragtime',
     label: 'Ragtime',
+    type: ShowType.MUSICAL,
   },
   {
     value: 'MJ The Musical',
     label: 'MJ The Musical',
+    type: ShowType.MUSICAL,
   },
   {
     value: 'The Outsiders',
     label: 'The Outsiders',
+    type: ShowType.MUSICAL,
+  },
+  {
+    value: 'Hamilton',
+    label: 'Hamilton',
+    type: ShowType.MUSICAL,
   },
 ];
 
@@ -65,7 +75,7 @@ function Main() {
     const [categories, setCategories] = React.useState(() => ['']);
     const [times, setTimes] = React.useState(() => ['']);
     const [date, setDate] = React.useState(() => '');
-    const [shows, setShows] = React.useState(() => []);
+    const [selectedShows, setSelectedShows] = React.useState(() => ['Chicago', 'The Outsiders', 'Hamilton']);
     const [sites, setSites] = React.useState(() => []);
 
     const changeCategories = (
@@ -171,163 +181,160 @@ function Main() {
                     textAlign: 'center',
                    backgroundColor: '#e6e6e6',
                 }}>
-                    <div></div>
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        placeItems: 'center',
-                        paddingBottom: '1%',
-                        paddingTop: '1%'
-                    }}>
-                        {/* // Replace wit Broadway and Off Broadway */}
-                        <div className="categories">Categories</div>
-                        <ToggleButtonGroup
-                            value={categories}
-                            size='large'
-                            sx={{ 
-                                mr: 2 
-
-                            }}
-                            onChange={changeCategories}>
-                            <ToggleButton 
-                                value="Play"
-                                sx={{ 
-                                    width: 200,
-                                    backgroundColor: 'white', 
-                                    border: '3px solid #99e6ff'
-                                }}>
-                                <TheaterComedyIcon />
-                                Play
-                            </ToggleButton>
-                            <Divider orientation="vertical" flexItem />
-                            <ToggleButton 
-                                value="Musical"
-                                sx={{ 
-                                    width: 200,
-                                    backgroundColor: 'white',
-                                    border: '3px solid #99e6ff'
-                                }}>
-                                <MusicNoteIcon />
-                                Musical
-                            </ToggleButton>
-                        </ToggleButtonGroup>
-                        <ToggleButtonGroup 
-                            value={times}
-                            exclusive
-                            size='large'
-                            onChange={changeTimes}    
-                        >
-                            <ToggleButton 
-                                value="Evening"
-                                sx={{
-                                    width: 200,
-                                    backgroundColor: 'white',
-                                    border: '3px solid #99e6ff'
-                                }}>
-                                <NightlightRoundIcon />
-                                Evening
-                            </ToggleButton>
-                            <Divider orientation="vertical" flexItem />
-                            <ToggleButton 
-                                value="Matinee"
-                                sx={{
-                                    width: 200,
-                                    backgroundColor: 'white',
-                                    border: '3px solid #99e6ff'
-                                }}>
-                                <SunnyIcon />
-                                Matinee
-                            </ToggleButton>
-                        </ToggleButtonGroup>
-                    </div>
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        placeItems: 'center'
-                    }}>
-                        <div className="categories">Date</div>
-                        <ToggleButtonGroup
-                            value={date}
-                            exclusive
-                            size='large'
-                            sx={{ mr: '2'}}>
-                            <ToggleButton
-                                value="Today"
-                                sx={{
-                                    backgroundColor: 'white', 
-                                    border: '3px solid #99e6ff'
-                                }}>
-                                <PriorityHighIcon />
-                                Today
-                            </ToggleButton>
-                            <Divider orientation="vertical" flexItem />
-                            <ToggleButton
-                                value="Tomorrow"
-                                sx={{
-                                    backgroundColor: 'white', 
-                                    border: '3px solid #99e6ff'
-                                }}>
-                                <UpdateIcon />
-                                Tomorrow
-                            </ToggleButton>
-                            <Divider orientation="vertical" flexItem />
-                            <ToggleButton
-                                value="This Weekend"
-                                sx={{
-                                    backgroundColor: 'white', 
-                                    border: '3px solid #99e6ff'
-                                }}>
-                                <DateRangeIcon />
-                                This Weekend
-                            </ToggleButton>
-                            <Divider orientation="vertical" flexItem />
-                            <ToggleButton
-                                value="Select Date"
-                                sx={{
-                                    backgroundColor: 'white', 
-                                    border: '3px solid #99e6ff'
-                                }}>
-                                    <CalendarMonthIcon />
-                                    Select Date
-                            </ToggleButton>
-
-                        </ToggleButtonGroup>
-                    </div>
-                    <div style={{
+                    <Grid container rowSpacing={2} columnSpacing={2}>
                         
-                    }}>
-                        { /* Visible only if there are shows from the search bar  */}
-                        <div className="categories">Shows Selected</div>
-                    </div>
-                    {/* <Grid container spacing={1}>
-                        <Grid size={1}></Grid>
-                        <Grid size={4}>
+                        <Grid size={2} sx={{
+                            textAlign: 'right'
+                        }}> 
+                            <div className="categories">Categories</div>
                         </Grid>
-                        <Grid size={1}></Grid>
-                        <Grid size={2}>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker label="Show Date" />
-                            </LocalizationProvider>
+                        <Grid size={10} sx={{
+                            textAlign: 'left'
+                        }}>
+                            <ToggleButtonGroup
+                                value={categories}
+                                size='medium'
+                                sx={{ 
+                                    mr: 2 
+                                }}
+                                onChange={changeCategories}>
+                                <ToggleButton 
+                                    value="Play"
+                                    sx={{ 
+                                        width: 200,
+                                        backgroundColor: 'white', 
+                                        border: '3px solid #99e6ff'
+                                    }}>
+                                    <TheaterComedyIcon />
+                                    Play
+                                </ToggleButton>
+                                <Divider orientation="vertical" flexItem />
+                                <ToggleButton 
+                                    value="Musical"
+                                    sx={{ 
+                                        width: 200,
+                                        backgroundColor: 'white',
+                                        border: '3px solid #99e6ff'
+                                    }}>
+                                    <MusicNoteIcon />
+                                    Musical
+                                </ToggleButton>
+                            </ToggleButtonGroup>
+                            <ToggleButtonGroup 
+                                value={times}
+                                exclusive
+                                size='medium'
+                                onChange={changeTimes}    
+                            >
+                                <ToggleButton 
+                                    value="Evening"
+                                    sx={{
+                                        width: 200,
+                                        backgroundColor: 'white',
+                                        border: '3px solid #99e6ff'
+                                    }}>
+                                    <NightlightRoundIcon />
+                                    Evening
+                                </ToggleButton>
+                                <Divider orientation="vertical" flexItem />
+                                <ToggleButton 
+                                    value="Matinee"
+                                    sx={{
+                                        width: 200,
+                                        backgroundColor: 'white',
+                                        border: '3px solid #99e6ff'
+                                    }}>
+                                    <SunnyIcon />
+                                    Matinee
+                                </ToggleButton>
+                            </ToggleButtonGroup>
                         </Grid>
-                        <Grid size={4}></Grid>
-                    </Grid> */}
+
+                        <Grid size={2} sx={{
+                            textAlign: 'right'
+                        }}>
+                            <div className="categories">Date</div>
+                        </Grid>
+                        <Grid size={10} sx={{
+                            textAlign: 'left'
+                        }}>
+                            <ToggleButtonGroup
+                                value={date}
+                                exclusive
+                                size='medium'
+                                sx={{ mr: '2'}}>
+                                <ToggleButton
+                                    value="Today"
+                                    sx={{
+                                        backgroundColor: 'white', 
+                                        border: '3px solid #99e6ff'
+                                    }}>
+                                    <PriorityHighIcon />
+                                    Today
+                                </ToggleButton>
+                                <Divider orientation="vertical" flexItem />
+                                <ToggleButton
+                                    value="Tomorrow"
+                                    sx={{
+                                        backgroundColor: 'white', 
+                                        border: '3px solid #99e6ff'
+                                    }}>
+                                    <UpdateIcon />
+                                    Tomorrow
+                                </ToggleButton>
+                                <Divider orientation="vertical" flexItem />
+                                <ToggleButton
+                                    value="This Weekend"
+                                    sx={{
+                                        backgroundColor: 'white', 
+                                        border: '3px solid #99e6ff'
+                                    }}>
+                                    <DateRangeIcon />
+                                    This Weekend
+                                </ToggleButton>
+                                <Divider orientation="vertical" flexItem />
+                                <ToggleButton
+                                    value="Select Date"
+                                    sx={{
+                                        backgroundColor: 'white', 
+                                        border: '3px solid #99e6ff'
+                                    }}>
+                                        <CalendarMonthIcon />
+                                        Select Date
+                                </ToggleButton>
+
+                            </ToggleButtonGroup>
+                        </Grid>
+
+                        { /* Visible only if there are shows selected from the search bar  */}
+                        <Grid size={2} sx={{
+                            textAlign: 'right'
+                        }}> 
+                            <div className="categories">Shows Selected</div>
+                        </Grid>
+                        <Grid size={10}>
+                            <Stack spacing={2} direction="row">
+                                {/* {selectedShows.map((show) => (
+                                    <Button></Button>
+                                ))} */}
+                                <Button variant='contained' endIcon={<ClearIcon />}>Hamilton</Button>
+                                <Button variant='contained' endIcon={<ClearIcon />}>Chicago</Button>
+                                <Button variant='contained' endIcon={<ClearIcon />}>The Outsiders</Button>
+                                <Button variant='contained' endIcon={<ClearIcon />}>Death Becomes Her</Button>
+                                <Button variant='contained' endIcon={<ClearIcon />}>Dear Even Hansen</Button>
+                            </Stack>
+                        </Grid>
+                    </Grid>
+                            
+                    
                 </Box>
+                
 
-                { /*/ Site Filters - 15% */}
-                <Box sx={{
-                    height: '15vh',
-                    alignContent: 'center',
-                    padding: 0,
-                    backgroundColor: '#e6e6e6',
-                }}>
-                    {/* <h3>Date</h3> */}
-
-                </Box>
-
-                {/* // Main Price Grid - 40%  */}
+                {/* // Main Price Grid - 40% + 20% of padding */}
                 <Box sx={{
                     height: '40vh',
                     backgroundColor: '#e6e6e6',
+                    paddingTop: '20vh',
                 }}>
                     <Grid container spacing={0.2}>
                         <Grid size={0.5}></Grid>

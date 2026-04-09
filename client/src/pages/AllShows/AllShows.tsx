@@ -52,7 +52,6 @@ const allShows: object[] = [
 
 function AllShows() {
     const [categories, setCategories] = React.useState(() => ['Play', 'Musical']);
-    // console.log("Initial categories: " + categories);
     const [currentShows, setCurrentShows] = React.useState(() => allShows);
 
     const changeCategories = (

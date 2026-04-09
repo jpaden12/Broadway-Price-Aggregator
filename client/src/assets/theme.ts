@@ -41,7 +41,7 @@ declare module '@mui/material/styles' {
     }
 }
 
-export const theme = createTheme({
+export const themeFromBuilder = createTheme({
     background: '#fafafa',
     backgroundTwo: '#fff',
     primary: '#15DCCF',
@@ -51,3 +51,10 @@ export const theme = createTheme({
     secondaryDark: '#0E179A',
     secondaryLight: '#434EE3',
 });
+
+export const theme = createTheme({
+    background: '#e6e6e6',
+    // Used for buttons on top of background
+    backgroundTwo: '#a6a6a6',
+    primary: '#99e6ff', 
+})

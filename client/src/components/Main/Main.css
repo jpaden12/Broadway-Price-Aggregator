@@ -29,14 +29,8 @@
 }
 
 .categories {
-    padding-left: 4%;
-    padding-right: 1%; 
-    /* vertical-align: middle; */
-    width: 8%;
-    display: inline-block;
+    vertical-align: left;
     font-size: x-large;
-    /* font-family: sans-serif; */
-    /* font-weight: bold; */
     text-decoration: underline;
 }
 
