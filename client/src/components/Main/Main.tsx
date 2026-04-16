@@ -69,8 +69,9 @@ function searchButtonHandler() {
     console.log("Button clicked!!");
 }
 
+
+
 function Main() {
-    console.log(window.innerWidth);
 
     const [categories, setCategories] = React.useState(() => ['']);
     const [times, setTimes] = React.useState(() => ['']);
@@ -93,6 +94,14 @@ function Main() {
         setTimes(newTimes)
         console.log(newTimes);
     };
+
+    const handleIconClick = (e: any) => {
+        const newShows = selectedShows.filter((show) => {
+            return show != e.currentTarget.id;
+        });
+        console.log(newShows);
+        setSelectedShows(newShows);
+    }
 
     getListings();
 
@@ -314,14 +323,15 @@ function Main() {
                         </Grid>
                         <Grid size={10}>
                             <Stack spacing={2} direction="row">
-                                {/* {selectedShows.map((show) => (
-                                    <Button></Button>
-                                ))} */}
-                                <Button variant='contained' endIcon={<ClearIcon />}>Hamilton</Button>
+                                {selectedShows.map((show) => (
+                                    <Button variant='contained' endIcon={<ClearIcon id={show} onClick={handleIconClick} />}>{show}</Button>
+                                ))}
+
+                                {/* <Button variant='contained' endIcon={<ClearIcon id={"Hamilton"} onClick={handleIconClick} />}>Hamilton</Button>
                                 <Button variant='contained' endIcon={<ClearIcon />}>Chicago</Button>
                                 <Button variant='contained' endIcon={<ClearIcon />}>The Outsiders</Button>
                                 <Button variant='contained' endIcon={<ClearIcon />}>Death Becomes Her</Button>
-                                <Button variant='contained' endIcon={<ClearIcon />}>Dear Even Hansen</Button>
+                                <Button variant='contained' endIcon={<ClearIcon />}>Dear Even Hansen</Button> */}
                             </Stack>
                         </Grid>
                     </Grid>
