@@ -2,7 +2,7 @@ import { ShowInfo } from "src/show-info/show-info.entity";
 import { ShowTime } from "src/show-info/types";
 
 
-export class PriceListingtDto {
+export class PriceListingDto {
     show_id: ShowInfo; 
     show_name: string;
     site_name: string; 

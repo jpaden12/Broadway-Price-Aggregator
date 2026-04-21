@@ -8,29 +8,29 @@ import { CreateShowInfoDto } from "./dtos/create-show_info.dto";
 export class ShowInfoController {
     constructor(private readonly showInfoService: ShowInfoService) {}
 
-    @Post('AddNewShow')
+    @Post('add-new-show')
     async postNewShow(@Body() show: CreateShowInfoDto): Promise<ShowInfo> {
         return await this.showInfoService.postNewShow(show);
     }
 
-    @Get('GetShowById')
+    @Get('get-show-by-id')
     async getShowById(@Query() param: object): Promise<ShowInfo | null> {
         // console.log(param['id']);
         // console.log(param['show_name']);
         return await this.showInfoService.getShowById(param);
     }
 
-    @Get('GetAllShows')
+    @Get('get-all-shows')
     async getAllShows(): Promise<ShowInfo[]> {
         return await this.showInfoService.getAllShows();
     }
 
-    @Delete('DeleteShow')
+    @Delete('delete-show')
     async deleteShow(@Query() param: object): Promise<boolean> {
         return this.showInfoService.deleteShow(param);
     }
     
-    @Patch('UpdateShow/:id')
+    @Patch('update-show/:id')
     async updateShow(@Param('id') id: number, @Body() body: object): Promise<ShowInfo> {
         console.log(body)
         return await this.showInfoService.updateShow(id, body);

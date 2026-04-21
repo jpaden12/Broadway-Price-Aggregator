@@ -2,11 +2,10 @@ import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
 import { PriceListing } from "./price-listing.entity";
 import { PriceListingRepository } from "./price-listing.repository";
-import { EntityManager, LoadedReference, QueryOrder } from "@mikro-orm/postgresql";
+import { EntityManager, LoadedReference, QueryOrder, serialize } from "@mikro-orm/postgresql";
 import { ShowInfo } from "src/show-info/show-info.entity";
 import { ShowLevel } from "src/show-info/types";
-import { PriceListingtDto } from "./price-listing.dto";
-import { PriceListing as ListingType } from "src/show-info/types";
+import { PriceListingDto } from "./price-listing.dto";
 
 
 @Injectable()
@@ -14,7 +13,8 @@ export class PriceListingService {
     constructor(@InjectRepository(PriceListing) private readonly priceListingRepository: PriceListingRepository, 
                 private readonly em: EntityManager) {}
 
-    async createPriceListing(listing: PriceListingtDto, given_show_name: string, show_level: ShowLevel): Promise<PriceListing> {
+
+    async createPriceListing(listing: PriceListingDto, given_show_name: string, show_level: ShowLevel): Promise<PriceListing> {
 
         const showRef = await this.em.find(ShowInfo, { show_name: given_show_name, level: show_level});
         const finalShow: ShowInfo = showRef[0];
@@ -43,6 +43,18 @@ export class PriceListingService {
         return newListing;
     }
 
+    // async batchCreateListing(listings: any): Promise<any> {
+    //     listings.forEach(async (newListing) => {
+    //         const showRef = await this.em.find(ShowInfo, {show_name: newListing.show_name, level: newListing.show_level});
+    //         const 
+
+    //     })
+
+    //     return listings;
+
+        
+    // }
+
     async getAllPriceListings(): Promise<PriceListing[]> {
         return this.priceListingRepository.findAll();
     }
@@ -54,11 +66,20 @@ export class PriceListingService {
     }
 
     async deletePriceListing(id: number): Promise<boolean> {
+        // Add error handling around deleting listing. Return false if unable to delete. 
         const listingRef: PriceListing = this.em.getReference(PriceListing, id);
 
         this.em.remove(listingRef);
         await this.em.flush();
         return true;
+    }
+
+    async getListingsByShow(given_show_id: object): Promise<PriceListing[]> {
+        const listings = this.em.find(PriceListing,
+        {
+            show_id: given_show_id['show_id']
+        });
+        return listings;
     }
 
     async cheapestPriceShow(showId: number): Promise<PriceListing | null> {

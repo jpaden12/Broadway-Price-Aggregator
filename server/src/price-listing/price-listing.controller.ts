@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Query } from "@nestjs/common";
 import { PriceListingService } from "./price-listing.service";
 import { PriceListing } from "./price-listing.entity";
-import { PriceListingtDto } from "./price-listing.dto";
+import { PriceListingDto } from "./price-listing.dto";
 import { ShowLevel } from "src/show-info/types";
 import { ApiOkResponse } from "@nestjs/swagger";
 
@@ -10,34 +10,47 @@ import { ApiOkResponse } from "@nestjs/swagger";
 export class PriceListingController {
     constructor(private readonly priceListingService: PriceListingService) {}
 
-    @Post('AddPriceListing')
+    @Post('add-price-listing')
     @ApiOkResponse({type: PriceListing})
-    async postNewListing(@Body('new_listing') listing: PriceListingtDto, @Body('show_name') name: string, @Body('level') level: ShowLevel): Promise<PriceListing> {
+    async postNewListing(@Body('new_listing') listing: PriceListingDto, @Body('show_name') name: string, @Body('level') level: ShowLevel): Promise<PriceListing> {
         return await this.priceListingService.createPriceListing(listing, name, level);
     }
 
-    @Get('AllPriceListings')
+    // @Post('BatchAddPriceListings')
+    // @ApiOkResponse({type: [PriceListing], isArray: true})
+    // async batchAddListing(@Body() listing_list: PriceListingDto[]) {
+    //     return await this.priceListingService.batchCreateListing(listing_list);
+    // }
+
+    @Get('all-price-listings')
     @ApiOkResponse({type: [PriceListing], isArray: true})
     async getAllPriceListings(): Promise<PriceListing[]> {
         return await this.priceListingService.getAllPriceListings();                                             
     }
 
-    @Get('GetListingById/:id')
+    // Update endpoint to use either URL par
+    @Get('get-listing-id/:id')
     @ApiOkResponse({type: PriceListing})
     async getPriceListing(@Param() param: object): Promise<PriceListing | null> {
         return await this.priceListingService.getPriceListing(param);
     }
 
-    @Delete('PriceListing')
+    @Delete('price-listing')
     @ApiOkResponse({description: "Price listing deleted successfully."})
     async deletePriceListing(@Query() param): Promise<boolean> {
         const listingId: number = param['id'];
         return await this.priceListingService.deletePriceListing(listingId);
     }
 
-    @Get('CheapestPriceByShow/:id')
+    @Get('get-listings-show')
+    @ApiOkResponse({type: [PriceListing], isArray: true})
+    async getListingsByShow(@Query() showId: object): Promise<PriceListing[]> {
+        return await this.priceListingService.getListingsByShow(showId);
+    }
+
+    @Get('cheapest-price-show/:show_id')
     @ApiOkResponse({type: PriceListing})
-    async cheapestPriceShow(@Param('id') showId): Promise<PriceListing | null> {
+    async cheapestPriceShow(@Param('show_id') showId): Promise<PriceListing | null> {
         // Check if the show id exists in the DB. Return an error if it doesn't. 
         return await this.priceListingService.cheapestPriceShow(showId);
     }

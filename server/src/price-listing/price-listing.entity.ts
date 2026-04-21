@@ -36,4 +36,14 @@ export class PriceListing {
     @Property({ nullable: true})
     notes?: string
 
+    constructor(show_name: string, site_name?: string, price?: string, show_date_time?: Date,
+         show_time_period?: ShowTime, fixed: boolean = false, notes?: string) {
+        this.show_name = show_name;
+        this.site_name = site_name;
+        this.show_date_time = show_date_time;
+        this.show_time_period = show_time_period;
+        this.fixed = fixed;
+        this.notes = notes;
+    }
+
 }
