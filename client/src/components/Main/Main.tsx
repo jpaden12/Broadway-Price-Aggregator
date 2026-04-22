@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, ButtonGroup, Container, Divider, Grid, IconButton, InputAdornment, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Autocomplete, Box, Button, Divider, Grid, IconButton, InputAdornment, Menu, MenuItem, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import type { GridColDef, GridRowsProp } from '@mui/x-data-grid';
 import { DataGrid } from '@mui/x-data-grid';
 import { TextField } from '@mui/material';
@@ -10,12 +10,11 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 import UpdateIcon from '@mui/icons-material/Update';
 import DateRangeIcon from '@mui/icons-material/DateRange';
-import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
+import SearchIcon from '@mui/icons-material/Search';
 
 import './Main.css';
 import React from 'react';
-import { getListings } from '../../api-layer/fetch-logic';
 import { ShowType } from '../../api-layer/types';
 
 
@@ -63,11 +62,25 @@ const shows = [
     label: 'Hamilton',
     type: ShowType.MUSICAL,
   },
+  {
+    value: 'Wicked',
+    label: 'Wicked',
+    type: ShowType.MUSICAL,
+  },
+  {
+    value: 'Aladdin',
+    label: 'Aladdin',
+    type: ShowType.MUSICAL,
+  },
+  {
+    value: 'Matilda the Musical',
+    label: 'Matilda the Musical',
+    type: ShowType.MUSICAL,
+  },
 ];
 
-function searchButtonHandler() {
-    console.log("Button clicked!!");
-}
+const allShowsArr = ['Chicago', 'Ragtime', 'The Outsiders', 'Matilda the Musical', 'Hamilton', 'Wicked', 'Aladdin', 'MJ The Musical'];
+
 
 
 
@@ -76,8 +89,13 @@ function Main() {
     const [categories, setCategories] = React.useState(() => ['']);
     const [times, setTimes] = React.useState(() => ['']);
     const [date, setDate] = React.useState(() => '');
-    const [selectedShows, setSelectedShows] = React.useState(() => ['Chicago', 'The Outsiders', 'Hamilton']);
+    const [filters, setFilters] = React.useState(() => {});
+
+    const [selectedShows, setSelectedShows] = React.useState(() => ['Chicago', 'Ragtime', 'The Outsiders']);
+    const [filteredShows, setFilteredShows] = React.useState(() => ['Chicago', 'Ragtime', 'The Outsiders', 'Matilda the Musical', 'Hamilton', 'Wicked', 'Aladdin', 'MJ The Musical']);
     const [sites, setSites] = React.useState(() => []);
+
+    
 
     const changeCategories = (
         event: React.MouseEvent<HTMLElement>,
@@ -96,28 +114,28 @@ function Main() {
     };
 
     const handleIconClick = (e: any) => {
-        const newShows = selectedShows.filter((show) => {
+        const newShows = filteredShows.filter((show) => {
             return show != e.currentTarget.id;
         });
-        console.log(newShows);
         setSelectedShows(newShows);
     }
 
-    getListings();
+    const showSearchChange = (e: any) => {
+        if (e.target.value.length == 0) {
+            setFilteredShows([]);
+        } else {
+            const newShows = allShowsArr.filter((show) => {
+                // console.log(show);
+                // console.log(show.includes(e.target.value));
+                return show.includes(e.target.value);
+            });
+            // console.log(newShows);
+            setFilteredShows(newShows);
+        }
+    }
 
     return (
         <div className='page-background'>
-            {/* <Container    
-                maxWidth={false}
-                sx={{
-                // backgroundColor: theme.background,
-                color: 'rgba(0, 0, 0, 0.87)'
-            
-                }}> */}
-
-                    
-                {/* // Header Navbar - 10% of page */}
-                {/* <Header></Header> */}
 
                 <Divider orientation='horizontal' sx={{
                     color: 'black'
@@ -135,50 +153,22 @@ function Main() {
                     <div className='tagline-box'>
                         <h2 className='tagline'>Discover cheap Broadway tickets across multiple sites.</h2>
                     </div>
-                    {/* <Autocomplete 
-                        options={shows} 
+                    <Autocomplete 
+                        options={filteredShows} 
+                        filterOptions={(x) => x}
+                        onInputChange={showSearchChange}
+                        popupIcon={<SearchIcon />}
+                        
                         renderInput={ (params) => 
                             <TextField sx={{
-                                width: '40%',
+                                width: '30%',
+                                backgroundColor: 'white'
                             }}
                             {...params}
-                            label="Search Show Name"
-                            // slotProps={{
-                            //     input: {
-                            //         startAdornment: (
-                            //             <InputAdornment position='start'>
-                                            
-                            //             </InputAdornment>
-                            //         ),
-                            //         endAdornment: (
-                            //             <InputAdornment position='end'>
-                            //                 <SearchIcon />
-                            //             </InputAdornment>
-                            //         )
-
-                            //     }
-                            // }}
-                            fullWidth />} /> */}
-
-                    <TextField 
-                        variant='outlined'
-                        label='Add Up To 5 Shows'
-                        sx={{
-                            width: '30%',
-                            backgroundColor: 'white'
-                        }}
-                        slotProps={{
-                            input: {
-                                endAdornment: (
-                                    <InputAdornment position='end'>
-                                        <IconButton onClick={searchButtonHandler}>
-                                            <SearchIcon />
-                                        </IconButton>
-                                    </InputAdornment>
-                                )
-                            }
-                        }}
-                    fullWidth />
+                            label="Add Up to Five Shows"
+                            fullWidth />} />
+                        
+                    
 
                 </Box>
 
@@ -210,7 +200,7 @@ function Main() {
                                 <ToggleButton 
                                     value="Play"
                                     sx={{ 
-                                        width: 200,
+                                        width: 150,
                                         backgroundColor: 'white', 
                                         border: '3px solid #99e6ff'
                                     }}>
@@ -221,7 +211,7 @@ function Main() {
                                 <ToggleButton 
                                     value="Musical"
                                     sx={{ 
-                                        width: 200,
+                                        width: 150,
                                         backgroundColor: 'white',
                                         border: '3px solid #99e6ff'
                                     }}>
@@ -234,11 +224,14 @@ function Main() {
                                 exclusive
                                 size='medium'
                                 onChange={changeTimes}    
+                                sx={{ 
+                                    mr: 2 
+                                }}
                             >
                                 <ToggleButton 
                                     value="Evening"
                                     sx={{
-                                        width: 200,
+                                        width: 150,
                                         backgroundColor: 'white',
                                         border: '3px solid #99e6ff'
                                     }}>
@@ -249,12 +242,40 @@ function Main() {
                                 <ToggleButton 
                                     value="Matinee"
                                     sx={{
-                                        width: 200,
+                                        width: 150,
                                         backgroundColor: 'white',
                                         border: '3px solid #99e6ff'
                                     }}>
                                     <SunnyIcon />
                                     Matinee
+                                </ToggleButton>
+                            </ToggleButtonGroup>
+                             <ToggleButtonGroup 
+                                value={times}
+                                exclusive
+                                size='medium'
+                                onChange={changeTimes}    
+                            >
+                                <ToggleButton 
+                                    value="Broadway"
+                                    sx={{
+                                        width: 150,
+                                        backgroundColor: 'white',
+                                        border: '3px solid #99e6ff'
+                                    }}>
+                                    <NightlightRoundIcon />
+                                    Broadway
+                                </ToggleButton>
+                                <Divider orientation="vertical" flexItem />
+                                <ToggleButton 
+                                    value="Off-Broadway"
+                                    sx={{
+                                        width: 150,
+                                        backgroundColor: 'white',
+                                        border: '3px solid #99e6ff'
+                                    }}>
+                                    <SunnyIcon />
+                                    Off-Brdwy
                                 </ToggleButton>
                             </ToggleButtonGroup>
                         </Grid>
@@ -326,12 +347,6 @@ function Main() {
                                 {selectedShows.map((show) => (
                                     <Button variant='contained' endIcon={<ClearIcon id={show} onClick={handleIconClick} />}>{show}</Button>
                                 ))}
-
-                                {/* <Button variant='contained' endIcon={<ClearIcon id={"Hamilton"} onClick={handleIconClick} />}>Hamilton</Button>
-                                <Button variant='contained' endIcon={<ClearIcon />}>Chicago</Button>
-                                <Button variant='contained' endIcon={<ClearIcon />}>The Outsiders</Button>
-                                <Button variant='contained' endIcon={<ClearIcon />}>Death Becomes Her</Button>
-                                <Button variant='contained' endIcon={<ClearIcon />}>Dear Even Hansen</Button> */}
                             </Stack>
                         </Grid>
                     </Grid>

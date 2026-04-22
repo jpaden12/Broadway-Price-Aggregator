@@ -14,7 +14,7 @@ function Header() {
                     <Grid size={4}>
                         <Link to="/home"> <h2 className='nav-buttons'>Home</h2> </Link>
                         <Link to="/allshows"> <h2 className='nav-buttons'>All Shows</h2> </Link>
-                        {/* <Link to="/"> <h2 className='nav-buttons'>Admin</h2></Link> {" "} */}
+                        <Link to="/home"> <h2 className='nav-buttons'>Admin</h2></Link> {" "}
                     </Grid>
                     <Grid size={1}></Grid>
                     <Grid size={3}><h2>Dark Mode</h2></Grid>
