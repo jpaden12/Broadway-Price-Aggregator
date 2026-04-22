@@ -91,7 +91,7 @@ function Main() {
     const [date, setDate] = React.useState(() => '');
     const [filters, setFilters] = React.useState(() => {});
 
-    const [selectedShows, setSelectedShows] = React.useState(() => ['Chicago', 'Ragtime', 'The Outsiders']);
+    const [selectedShows, setSelectedShows] = React.useState(() => []);
     const [filteredShows, setFilteredShows] = React.useState(() => ['Chicago', 'Ragtime', 'The Outsiders', 'Matilda the Musical', 'Hamilton', 'Wicked', 'Aladdin', 'MJ The Musical']);
     const [sites, setSites] = React.useState(() => []);
 
@@ -102,7 +102,6 @@ function Main() {
         newFormats: string[],
     ) => {
         setCategories(newFormats);
-        console.log(newFormats);
     };
 
     const changeTimes = (
@@ -114,23 +113,30 @@ function Main() {
     };
 
     const handleIconClick = (e: any) => {
-        const newShows = filteredShows.filter((show) => {
+        
+        const newShows = selectedShows.filter((show) => {
             return show != e.currentTarget.id;
         });
+        console.log(newShows);
         setSelectedShows(newShows);
     }
 
-    const showSearchChange = (e: any) => {
+    const showSearchInputChange = (e: any) => {
         if (e.target.value.length == 0) {
             setFilteredShows([]);
         } else {
             const newShows = allShowsArr.filter((show) => {
-                // console.log(show);
-                // console.log(show.includes(e.target.value));
                 return show.includes(e.target.value);
             });
-            // console.log(newShows);
+            console.log(e.target.value);
             setFilteredShows(newShows);
+        }
+    }
+
+    const showSearchValueChange = (e: any, v: any) => {
+        
+        if (v.length > 0 && !selectedShows.includes(v)) {
+            setSelectedShows([...selectedShows, v])
         }
     }
 
@@ -156,8 +162,10 @@ function Main() {
                     <Autocomplete 
                         options={filteredShows} 
                         filterOptions={(x) => x}
-                        onInputChange={showSearchChange}
+                        onInputChange={showSearchInputChange}
+                        onChange={showSearchValueChange}
                         popupIcon={<SearchIcon />}
+                    
                         
                         renderInput={ (params) => 
                             <TextField sx={{
@@ -168,8 +176,6 @@ function Main() {
                             label="Add Up to Five Shows"
                             fullWidth />} />
                         
-                    
-
                 </Box>
 
                 {/* // Category and Date Filters - 15% */}
