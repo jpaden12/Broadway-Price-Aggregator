@@ -91,8 +91,8 @@ function Main() {
     const [date, setDate] = React.useState(() => '');
     const [filters, setFilters] = React.useState(() => {});
 
-    const [selectedShows, setSelectedShows] = React.useState(() => []);
-    const [filteredShows, setFilteredShows] = React.useState(() => ['Chicago', 'Ragtime', 'The Outsiders', 'Matilda the Musical', 'Hamilton', 'Wicked', 'Aladdin', 'MJ The Musical']);
+    const [selectedShows, setSelectedShows] = React.useState<string[]>(() => []);
+    const [filteredShows, setFilteredShows] = React.useState<string[]>(() => ['Chicago', 'Ragtime', 'The Outsiders', 'Matilda the Musical', 'Hamilton', 'Wicked', 'Aladdin', 'MJ The Musical']);
     const [sites, setSites] = React.useState(() => []);
 
     
@@ -122,8 +122,13 @@ function Main() {
     }
 
     const showSearchInputChange = (e: any) => {
-        if (e.target.value.length == 0) {
-            setFilteredShows([]);
+        if (e.target.value == undefined || e.target.value.length == 0) {
+            // Change filtered shows to exclude currently seelcted shows
+            const allButSelected = allShowsArr.filter((show) => {
+                return !selectedShows.includes(show);
+            });
+            console.log(allButSelected);
+            setFilteredShows(allButSelected);
         } else {
             const newShows = allShowsArr.filter((show) => {
                 return show.includes(e.target.value);
