@@ -2,7 +2,7 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { ShowInfo } from './show-info.entity';
 import { ShowInfoRepository } from './show-info.repository';
 import { Injectable } from '@nestjs/common';
-import { CreateShowInfoDto } from './dtos/create-show_info.dto';
+import { ShowInfoDto } from './dtos/show-info.dto';
 import { EntityManager, wrap } from '@mikro-orm/postgresql';
 import { ShowType, ShowInfo as ShowInfoType } from './types';
 
@@ -11,19 +11,7 @@ export class ShowInfoService {
     constructor(@InjectRepository(ShowInfo) private readonly showInfoRepository: ShowInfoRepository,
         private readonly em: EntityManager) { }
 
-    async postNewShow(show: CreateShowInfoDto): Promise<ShowInfo> {
-
-        // const newShow = new ShowInfo();
-        // newShow.address = '242 W 45th St, New York, NY 10036';
-        // newShow.show_name = 'Illinoise';
-        // newShow.venue = 'St. James Theatre';
-        // newShow.website = 'https://outsidersmusical.com';
-        // newShow.type = ShowType.MUSICAL;
-        // newShow.level = ShowLevel.BROADWAY;
-        // newShow.runtime = 180;
-        // newShow.opening_date = new Date();
-        // newShow.closing_date = new Date(2023, 12, 4);
-        // newShow.closed = true;
+    async postNewShow(show: ShowInfoDto): Promise<ShowInfo> {
 
         const newShow: ShowInfo = {
             show_name: show.show_name,
@@ -45,7 +33,6 @@ export class ShowInfoService {
 
     async getAllShows(): Promise<ShowInfo[]> {
         // Add error handling
-        console.log("STOP HERE");
         return this.showInfoRepository.findAll();
     }
 
@@ -84,17 +71,6 @@ export class ShowInfoService {
             type: ShowType.MUSICAL
         };
 
-        // wrap(show).assign({
-        //     show_name: body['show_name'] ?? show.show_name,
-        //     venue: body['venue'] ?? show.venue,
-        //     website: body['website'] ?? show.website,
-        //     address: body['address'] ?? show.address,
-        //     level: body['show_level'] ?? show.level,
-        //     opening_date: body['opening_date'] ?? show.opening_date,
-        //     closing_date: body['closing_date'] ?? show.closing_date,
-        //     closed: body['closed'] ?? show.closed,
-        //     display: body['display'] ?? show.display,
-        // });
         wrap(show).assign(updatedShow);
         await this.em.flush()
         return show;

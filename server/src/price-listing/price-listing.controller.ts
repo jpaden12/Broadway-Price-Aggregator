@@ -10,17 +10,19 @@ import { ApiOkResponse } from "@nestjs/swagger";
 export class PriceListingController {
     constructor(private readonly priceListingService: PriceListingService) {}
 
+    // TODO: Refactor to change parameters to match the batch request
     @Post('add-price-listing')
     @ApiOkResponse({type: PriceListing})
-    async postNewListing(@Body('new_listing') listing: PriceListingDto, @Body('show_name') name: string, @Body('level') level: ShowLevel): Promise<PriceListing> {
+    async postNewListing(@Body('new_listing') listing: PriceListingDto,
+     @Body('show_name') name: string, @Body('level') level: ShowLevel): Promise<PriceListing> {
         return await this.priceListingService.createPriceListing(listing, name, level);
     }
 
-    // @Post('BatchAddPriceListings')
-    // @ApiOkResponse({type: [PriceListing], isArray: true})
-    // async batchAddListing(@Body() listing_list: PriceListingDto[]) {
-    //     return await this.priceListingService.batchCreateListing(listing_list);
-    // }
+    @Post('batch-add-listings')
+    @ApiOkResponse({type: [PriceListing], isArray: true})
+    async batchAddListing(@Body() listing_list: PriceListingDto[]) {
+        return await this.priceListingService.batchAddListings(listing_list);
+    }
 
     @Get('all-price-listings')
     @ApiOkResponse({type: [PriceListing], isArray: true})
@@ -32,7 +34,8 @@ export class PriceListingController {
     @Get('get-listing-id/:id')
     @ApiOkResponse({type: PriceListing})
     async getPriceListing(@Param() param: object): Promise<PriceListing | null> {
-        return await this.priceListingService.getPriceListing(param);
+        const listing_id: number = param['id'];
+        return await this.priceListingService.getPriceListing(listing_id);
     }
 
     @Delete('price-listing')

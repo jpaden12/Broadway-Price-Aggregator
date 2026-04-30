@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from "@nestjs/common";
 import { ShowInfo } from "./show-info.entity";
 import { ShowInfoService } from "./show-info.service";
-import { CreateShowInfoDto } from "./dtos/create-show_info.dto";
+import { ShowInfoDto } from "./dtos/show-info.dto";
 
 
 @Controller('api')
@@ -9,7 +9,7 @@ export class ShowInfoController {
     constructor(private readonly showInfoService: ShowInfoService) {}
 
     @Post('add-new-show')
-    async postNewShow(@Body() show: CreateShowInfoDto): Promise<ShowInfo> {
+    async postNewShow(@Body() show: ShowInfoDto): Promise<ShowInfo> {
         return await this.showInfoService.postNewShow(show);
     }
 

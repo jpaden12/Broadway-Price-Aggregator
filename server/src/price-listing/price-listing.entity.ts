@@ -1,6 +1,6 @@
 import { DecimalType, Entity, ManyToOne, PrimaryKey, Property } from "@mikro-orm/core";
 import { ShowInfo } from "../show-info/show-info.entity";
-import { ShowTime } from "../show-info/types";
+import { ShowLevel, ShowTime } from "../show-info/types";
 
 
 @Entity()
@@ -12,6 +12,7 @@ export class PriceListing {
     @ManyToOne(() => ShowInfo, {index: 'show_id'})
     show_id?: ShowInfo; 
 
+    // TODO: Make this non-null
     @Property({ nullable: true}) 
     show_name?: string;
 
@@ -27,8 +28,14 @@ export class PriceListing {
     @Property()
     show_time_period?: ShowTime
 
+    @Property({ nullable: true })
+    website?: string
+
     @Property({ type: 'datetime'})
     date_of_capture?: Date
+
+    @Property({ type: 'datetime', default: new Date().toISOString() })
+    date_last_updated?: Date
 
     @Property()
     fixed?: boolean
@@ -36,14 +43,18 @@ export class PriceListing {
     @Property({ nullable: true})
     notes?: string
 
-    constructor(show_name: string, site_name?: string, price?: string, show_date_time?: Date,
-         show_time_period?: ShowTime, fixed: boolean = false, notes?: string) {
+    constructor(show_id: ShowInfo, show_name: string, site_name?: string, price?: string, show_date_time?: Date,
+         show_time_period?: ShowTime, fixed: boolean = false, notes?: string, website?: string, ) {
         this.show_name = show_name;
+        this.show_id = show_id;
         this.site_name = site_name;
+        this.price = price;
         this.show_date_time = show_date_time;
         this.show_time_period = show_time_period;
         this.fixed = fixed;
         this.notes = notes;
+        this.website = website;
+        
     }
 
 }

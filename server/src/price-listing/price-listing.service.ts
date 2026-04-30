@@ -2,10 +2,11 @@ import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
 import { PriceListing } from "./price-listing.entity";
 import { PriceListingRepository } from "./price-listing.repository";
-import { EntityManager, LoadedReference, QueryOrder, serialize } from "@mikro-orm/postgresql";
+import { EntityManager, LoadedReference, QueryOrder, serialize, wrap } from "@mikro-orm/postgresql";
 import { ShowInfo } from "src/show-info/show-info.entity";
 import { ShowLevel } from "src/show-info/types";
 import { PriceListingDto } from "./price-listing.dto";
+import { notEqual } from "assert";
 
 
 @Injectable()
@@ -28,41 +29,44 @@ export class PriceListingService {
             show_time_period: listing.show_time_period, 
             date_of_capture: new Date(), 
             fixed: listing.fixed, 
-            notes: listing.notes
+            notes: listing.notes,
         }
-        // newListing.price = "40.00";
-        // newListing.fixed = true; 
-        // newListing.show_id = showRef;
-        // newListing.show_time_period = ShowTime.MATINEE;
-        // newListing.site_name = "Rush";
-        // newListing.notes = "Under 30 rush tickets"
-        // newListing.show_date_time = new Date(2025, 3, 4, 17, 0);
-        // newListing.date_of_capture = new Date();
 
         await this.priceListingRepository.insert(newListing);
         return newListing;
     }
 
-    // async batchCreateListing(listings: any): Promise<any> {
-    //     listings.forEach(async (newListing) => {
-    //         const showRef = await this.em.find(ShowInfo, {show_name: newListing.show_name, level: newListing.show_level});
-    //         const 
+    async batchAddListings(listings: any): Promise<any> {
+        const listingsToAdd: PriceListing[] = await this.populateListings(listings); 
 
-    //     })
+        await this.priceListingRepository.insertMany(listingsToAdd);
+        return listings;
+    }
 
-    //     return listings;
+    async populateListings(listings): Promise<PriceListing[]> {
+        const promises = listings.map(async (listing) => {
+            const showRef = await this.em.find(ShowInfo, {show_name: listing.show_name, level: listing.level as ShowLevel});
+            const finalShow: ShowInfo = showRef[0];
 
-        
-    // }
+            const finalListing = new PriceListing(finalShow, listing.show_name, listing.site_name, listing.price
+                ,listing.show_date_time, listing.show_time_period, listing.fixed, listing.notes, listing.website)
+
+            finalListing.date_last_updated = new Date();
+            finalListing.date_of_capture = new Date();
+            return finalListing;
+        });
+        return await Promise.all(promises);
+    }
 
     async getAllPriceListings(): Promise<PriceListing[]> {
         return this.priceListingRepository.findAll();
     }
 
-    async getPriceListing(param: object): Promise<PriceListing | null> {
-        return this.priceListingRepository.findOne({
-            id: param['id']
+    async getPriceListing(id: number): Promise<PriceListing | null> {
+       return this.priceListingRepository.findOne({
+            id: id
         });
+
     }
 
     async deletePriceListing(id: number): Promise<boolean> {

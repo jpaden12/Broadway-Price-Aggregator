@@ -45,4 +45,20 @@ export class ShowInfo {
 
   @Property({ default: false })
   display!: boolean;
+
+  constructor(show_name: string, venue: string, address: string, website: string, type: ShowType, level: ShowLevel, 
+    runtime: number, opening_date: Date, closing_date: Date, closed: boolean, display: boolean) 
+  {
+    this.show_name = show_name;
+    this.venue = venue; 
+    this.address = address; 
+    this.website = website; 
+    this.type = type; 
+    this.level = level; 
+    this.runtime = runtime;
+    this.opening_date = opening_date; 
+    this.closing_date = closing_date; 
+    this.closed = closed; 
+    this.display = display; 
+  }
 }
