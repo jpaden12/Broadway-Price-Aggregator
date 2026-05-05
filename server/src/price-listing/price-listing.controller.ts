@@ -26,8 +26,11 @@ export class PriceListingController {
 
     @Get('all-price-listings')
     @ApiOkResponse({type: [PriceListing], isArray: true})
-    async getAllPriceListings(): Promise<PriceListing[]> {
-        return await this.priceListingService.getAllPriceListings();                                             
+    async getAllPriceListings(@Query() param): Promise<PriceListing[]> {
+        let name = param['name'];
+        let type = param['type'];
+        let time = param['time'];
+        return await this.priceListingService.getAllPriceListings(name, type, time);                                             
     }
 
     // Update endpoint to use either URL par

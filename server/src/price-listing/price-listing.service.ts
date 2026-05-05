@@ -58,8 +58,30 @@ export class PriceListingService {
         return await Promise.all(promises);
     }
 
-    async getAllPriceListings(): Promise<PriceListing[]> {
-        return this.priceListingRepository.findAll();
+    async getAllPriceListings(name: string, type: string, time: string): Promise<PriceListing[]> {
+        const queryFilters: object[] = [];
+        if (name !== undefined) {
+            const nameQuery = { 'show_info.name': name }
+            queryFilters.push(nameQuery);
+        }
+        if (type !== undefined) {
+            const typeQuery = {'show_info.type': type }
+            queryFilters.push(typeQuery);
+        }
+        if (time !== undefined) {
+            const timeQuery = {'show_info.time': time }
+            queryFilters.push(timeQuery);
+        }
+        const query = await this.em.createQueryBuilder(PriceListing, 'price_listing')
+                .select(['show_name', 'price', 'show_info.type'])
+                .innerJoin('price_listing.show_id', 'show_info')
+                .where({
+                    $and: queryFilters
+                })
+                .execute('all');
+        return query;
+        ;
+        // return this.priceListingRepository.findAll();
     }
 
     async getPriceListing(id: number): Promise<PriceListing | null> {
