@@ -15,7 +15,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 import './Main.css';
 import React from 'react';
-import { ShowType } from '../../api-layer/types';
+import { ShowType, type DummyShow } from '../../api-layer/types';
 
 
 
@@ -79,29 +79,77 @@ const shows = [
   },
 ];
 
-const allShowsArr = ['Chicago', 'Ragtime', 'The Outsiders', 'Matilda the Musical', 'Hamilton', 'Wicked', 'Aladdin', 'MJ The Musical'];
-
+const allShowsArr: DummyShow[] = [
+    {
+        name: 'Chicago',
+        type: 'Musical',
+    },
+    {
+        name: 'Ragtime',
+        type: 'Musical'
+    },
+    {
+        name: 'The Outsiders',
+        type: 'Musical'
+    },
+    {
+        name: 'Hamilton',
+        type: 'Musical'
+    },
+    {
+        name: 'Wicked',
+        type: 'Musical'
+    },
+    {
+        name: 'Aladdin',
+        type: 'Musical'
+    },
+    {
+        name: 'MJ The Musical',
+        type: 'Musical'
+    },
+    {
+        name: 'Stranger Things',
+        type: 'Play'
+    },
+    {
+        name: 'Proof',
+        type: 'Play'
+    }
+]; 
 
 
 
 function Main() {
 
-    const [categories, setCategories] = React.useState(() => ['']);
+    const [categories, setCategories] = React.useState(() => '');
     const [times, setTimes] = React.useState(() => ['']);
     const [date, setDate] = React.useState(() => '');
     const [filters, setFilters] = React.useState(() => {});
 
-    const [selectedShows, setSelectedShows] = React.useState<string[]>(() => []);
-    const [filteredShows, setFilteredShows] = React.useState<string[]>(() => ['Chicago', 'Ragtime', 'The Outsiders', 'Matilda the Musical', 'Hamilton', 'Wicked', 'Aladdin', 'MJ The Musical']);
+    // Selected shows - Shows that are chosen from the search bar and appear in "selected shows" and/or in the grid
+    const [selectedShows, setSelectedShows] = React.useState<DummyShow[]>(() => []);
+
+    // Filtered shows - Shows that appear under the search bar
+    const [filteredShows, setFilteredShows] = React.useState<DummyShow[]>(() => allShowsArr);
     const [sites, setSites] = React.useState(() => []);
 
     
 
     const changeCategories = (
         event: React.MouseEvent<HTMLElement>,
-        newFormats: string[],
+        newCategory: string,
     ) => {
-        setCategories(newFormats);
+        console.log("New category: " + newCategory);
+        setCategories(newCategory);
+        let selectedShows: DummyShow[];
+        if (newCategory == "Musical") {
+            selectedShows = [{name: "All Musicals", type: "Musical"}];
+        } else {
+            selectedShows = [{name: "All Plays", type: "Play"}];
+        }
+        let filteredShows: DummyShow[] = filterShowsFromPage("ShowType", newCategory);
+        setSelectedShows(selectedShows);
     };
 
     const changeTimes = (
@@ -109,16 +157,22 @@ function Main() {
         newTimes: string[],
     ) => {
         setTimes(newTimes)
-        console.log(newTimes);
+        console.log("New time " + newTimes);
     };
 
-    const handleIconClick = (e: any) => {
+    const handleIconClick = (e: any) => {   
+        console.log(e.currentTarget.id);
+        if (e.currentTarget.id == "All Musicals" || e.currentTarget.id == "All Plays") {
+            setSelectedShows([]);
+        } else {
+            const newShows = selectedShows.filter((show) => {
+                return show.name != e.currentTarget.id;
+            });
+            setSelectedShows(newShows);
+        }
+        // console.log("Selected shows " + JSON.stringify(selectedShows));
         
-        const newShows = selectedShows.filter((show) => {
-            return show != e.currentTarget.id;
-        });
-        console.log(newShows);
-        setSelectedShows(newShows);
+        // console.log("New shows " + JSON.stringify(newShows));
     }
 
     const showSearchInputChange = (e: any) => {
@@ -131,18 +185,31 @@ function Main() {
             setFilteredShows(allButSelected);
         } else {
             const newShows = allShowsArr.filter((show) => {
-                return show.includes(e.target.value);
+                return show.name.includes(e.target.value);
             });
             console.log(e.target.value);
             setFilteredShows(newShows);
         }
     }
 
-    const showSearchValueChange = (e: any, v: any) => {
-        
-        if (v.length > 0 && !selectedShows.includes(v)) {
+    const showSearchValueChange = (e: any, v: DummyShow) => {
+        console.log("Value " + JSON.stringify(v));
+        // console.log("Event " + JSON.stringify(e));
+        console.log("Selected shows " + selectedShows);
+        if (v.name.length > 0 && !selectedShows.includes(v)) {
             setSelectedShows([...selectedShows, v])
         }
+    }
+
+    const filterShowsFromPage = (filterName: string, filter: string): DummyShow[] => {
+        if (filterName == "ShowType") {
+            const filteredShows = allShowsArr.filter((show) => {
+                return show.type.includes(filter);
+            });
+            console.log(filteredShows)
+            return filteredShows;
+        }
+        return [];
     }
 
     return (
@@ -166,6 +233,7 @@ function Main() {
                     </div>
                     <Autocomplete 
                         options={filteredShows} 
+                        getOptionLabel={(show) => show.name}
                         filterOptions={(x) => x}
                         onInputChange={showSearchInputChange}
                         onChange={showSearchValueChange}
@@ -196,13 +264,14 @@ function Main() {
                         <Grid size={2} sx={{
                             textAlign: 'right'
                         }}> 
-                            <div className="categories">Categories</div>
+                            <div className="categories">Filter by Category</div>
                         </Grid>
                         <Grid size={10} sx={{
                             textAlign: 'left'
                         }}>
                             <ToggleButtonGroup
                                 value={categories}
+                                exclusive
                                 size='medium'
                                 sx={{ 
                                     mr: 2 
@@ -237,8 +306,7 @@ function Main() {
                                 onChange={changeTimes}    
                                 sx={{ 
                                     mr: 2 
-                                }}
-                            >
+                                }}>
                                 <ToggleButton 
                                     value="Evening"
                                     sx={{
@@ -261,11 +329,11 @@ function Main() {
                                     Matinee
                                 </ToggleButton>
                             </ToggleButtonGroup>
-                             <ToggleButtonGroup 
-                                value={times}
+                             {/* <ToggleButtonGroup 
+                                value={categories}
                                 exclusive
                                 size='medium'
-                                onChange={changeTimes}    
+                                onChange={changeCategories}    
                             >
                                 <ToggleButton 
                                     value="Broadway"
@@ -288,7 +356,7 @@ function Main() {
                                     <SunnyIcon />
                                     Off-Brdwy
                                 </ToggleButton>
-                            </ToggleButtonGroup>
+                            </ToggleButtonGroup> */}
                         </Grid>
 
                         <Grid size={2} sx={{
@@ -356,7 +424,7 @@ function Main() {
                         <Grid size={10}>
                             <Stack spacing={2} direction="row">
                                 {selectedShows.map((show) => (
-                                    <Button variant='contained' endIcon={<ClearIcon id={show} onClick={handleIconClick} />}>{show}</Button>
+                                    <Button variant='contained' endIcon={<ClearIcon id={show.name} onClick={handleIconClick} />}>{show.name}</Button>
                                 ))}
                             </Stack>
                         </Grid>

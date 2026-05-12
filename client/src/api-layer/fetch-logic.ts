@@ -16,7 +16,7 @@ export async function fetchPriceListings(shows: string[], sites: string[]): Prom
 
 export async function getListings() {
     useEffect(() => {
-        fetch("")
+        await fetch("")
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);

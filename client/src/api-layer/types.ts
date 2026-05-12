@@ -57,3 +57,8 @@ export enum ShowTime {
     MATINEE = "Matinee", 
     EVENING = "Evening"
 }
+
+export interface DummyShow {
+    name: string,
+    type: string
+}
