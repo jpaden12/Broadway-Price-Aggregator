@@ -118,6 +118,9 @@ const allShowsArr: DummyShow[] = [
     }
 ]; 
 
+const allPlaysObj: DummyShow[] = [{name: "All Plays", type: "Play"}];
+const allMusicalsObj: DummyShow[] = [{name: "All Musicals", type: "Musical"}];
+
 
 
 function Main() {
@@ -141,14 +144,22 @@ function Main() {
         newCategory: string,
     ) => {
         console.log("New category: " + newCategory);
-        setCategories(newCategory);
+        if (newCategory != null) {
+            setCategories(newCategory);
+        } else {
+            setCategories('');
+        }
+
         let selectedShows: DummyShow[];
         if (newCategory == "Musical") {
-            selectedShows = [{name: "All Musicals", type: "Musical"}];
+            selectedShows = allMusicalsObj;
+        } else if (newCategory == "Play") {
+            selectedShows = allPlaysObj
         } else {
-            selectedShows = [{name: "All Plays", type: "Play"}];
+            selectedShows = [];
         }
-        let filteredShows: DummyShow[] = filterShowsFromPage("ShowType", newCategory);
+        
+        // let filteredShows: DummyShow[] = filterShowsFromPage("ShowType", newCategory);
         setSelectedShows(selectedShows);
     };
 
@@ -157,22 +168,20 @@ function Main() {
         newTimes: string[],
     ) => {
         setTimes(newTimes)
-        console.log("New time " + newTimes);
+        // console.log("New time " + newTimes);
     };
 
     const handleIconClick = (e: any) => {   
         console.log(e.currentTarget.id);
         if (e.currentTarget.id == "All Musicals" || e.currentTarget.id == "All Plays") {
             setSelectedShows([]);
+            setCategories('');
         } else {
             const newShows = selectedShows.filter((show) => {
                 return show.name != e.currentTarget.id;
             });
             setSelectedShows(newShows);
         }
-        // console.log("Selected shows " + JSON.stringify(selectedShows));
-        
-        // console.log("New shows " + JSON.stringify(newShows));
     }
 
     const showSearchInputChange = (e: any) => {
@@ -181,23 +190,25 @@ function Main() {
             const allButSelected = allShowsArr.filter((show) => {
                 return !selectedShows.includes(show);
             });
-            console.log(allButSelected);
             setFilteredShows(allButSelected);
         } else {
             const newShows = allShowsArr.filter((show) => {
                 return show.name.includes(e.target.value);
             });
-            console.log(e.target.value);
+            // console.log(e.target.value);
             setFilteredShows(newShows);
         }
     }
 
     const showSearchValueChange = (e: any, v: DummyShow) => {
         console.log("Value " + JSON.stringify(v));
-        // console.log("Event " + JSON.stringify(e));
-        console.log("Selected shows " + selectedShows);
-        if (v.name.length > 0 && !selectedShows.includes(v)) {
-            setSelectedShows([...selectedShows, v])
+        console.log("Selected shows " + JSON.stringify(selectedShows));
+        if (selectedShows == allPlaysObj || selectedShows == allMusicalsObj) {
+            setSelectedShows([v]);
+        } else {
+            if (v?.name.length > 0 && !selectedShows.includes(v)) {
+                setSelectedShows([...selectedShows, v])
+            }
         }
     }
 
@@ -206,7 +217,7 @@ function Main() {
             const filteredShows = allShowsArr.filter((show) => {
                 return show.type.includes(filter);
             });
-            console.log(filteredShows)
+            // console.log(filteredShows)
             return filteredShows;
         }
         return [];
@@ -214,7 +225,6 @@ function Main() {
 
     return (
         <div className='page-background'>
-
                 <Divider orientation='horizontal' sx={{
                     color: 'black'
                 }}></Divider>
@@ -424,13 +434,11 @@ function Main() {
                         <Grid size={10}>
                             <Stack spacing={2} direction="row">
                                 {selectedShows.map((show) => (
-                                    <Button variant='contained' endIcon={<ClearIcon id={show.name} onClick={handleIconClick} />}>{show.name}</Button>
+                                    <Button variant='contained' endIcon={<ClearIcon id={show?.name} onClick={handleIconClick} />}>{show?.name}</Button>
                                 ))}
                             </Stack>
                         </Grid>
                     </Grid>
-                            
-                    
                 </Box>
                 
 
