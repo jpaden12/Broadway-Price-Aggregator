@@ -1,5 +1,4 @@
 import { Container, Divider, Grid, ImageList, ImageListItem, ImageListItemBar, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import Header from "../../components/Header/Header";
 import './AllShows.css';
 import React from "react";
 import TheaterComedyIcon from '@mui/icons-material/TheaterComedy';
@@ -81,7 +80,6 @@ function AllShows() {
 
     return (
         <div>
-            {/* Header Navbar - 10% of page */}
             {/* <Header></Header> */}
 
             {/* Title and Selection Buttons - 25% of page */} 
@@ -143,7 +141,7 @@ function AllShows() {
                     <Grid size={2}></Grid>
                     <Grid size={8}>
                         <ImageList cols={3}>
-                        {currentShows.map((show) => (
+                        {currentShows.map((show: any) => (
                             <ImageListItem key={show.title}>
                                 <div style={{
                                     backgroundColor: show.color, 

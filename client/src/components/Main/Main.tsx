@@ -1,6 +1,5 @@
-import { Autocomplete, Box, Button, Divider, Grid, IconButton, InputAdornment, Menu, MenuItem, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Autocomplete, Box, Button, Divider, Grid, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import type { GridColDef, GridRowsProp } from '@mui/x-data-grid';
-import { DataGrid } from '@mui/x-data-grid';
 import { TextField } from '@mui/material';
 import TheaterComedyIcon from '@mui/icons-material/TheaterComedy';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
@@ -16,6 +15,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import './Main.css';
 import React from 'react';
 import { ShowType, type DummyShow } from '../../api-layer/types';
+import MainTable from '../../pages/Main/main-table/MainTable';
+import MainFilters from '../../pages/Main/main-filters/MainFilters';
 
 
 
@@ -195,7 +196,6 @@ function Main() {
             const newShows = allShowsArr.filter((show) => {
                 return show.name.includes(e.target.value);
             });
-            // console.log(e.target.value);
             setFilteredShows(newShows);
         }
     }
@@ -269,193 +269,14 @@ function Main() {
                     textAlign: 'center',
                    backgroundColor: '#e6e6e6',
                 }}>
-                    <Grid container rowSpacing={2} columnSpacing={2}>
-                        
-                        <Grid size={2} sx={{
-                            textAlign: 'right'
-                        }}> 
-                            <div className="categories">Filter by Category</div>
-                        </Grid>
-                        <Grid size={10} sx={{
-                            textAlign: 'left'
-                        }}>
-                            <ToggleButtonGroup
-                                value={categories}
-                                exclusive
-                                size='medium'
-                                sx={{ 
-                                    mr: 2 
-                                }}
-                                onChange={changeCategories}>
-                                <ToggleButton 
-                                    value="Play"
-                                    sx={{ 
-                                        width: 150,
-                                        backgroundColor: 'white', 
-                                        border: '3px solid #99e6ff'
-                                    }}>
-                                    <TheaterComedyIcon />
-                                    Play
-                                </ToggleButton>
-                                <Divider orientation="vertical" flexItem />
-                                <ToggleButton 
-                                    value="Musical"
-                                    sx={{ 
-                                        width: 150,
-                                        backgroundColor: 'white',
-                                        border: '3px solid #99e6ff'
-                                    }}>
-                                    <MusicNoteIcon />
-                                    Musical
-                                </ToggleButton>
-                            </ToggleButtonGroup>
-                            <ToggleButtonGroup 
-                                value={times}
-                                exclusive
-                                size='medium'
-                                onChange={changeTimes}    
-                                sx={{ 
-                                    mr: 2 
-                                }}>
-                                <ToggleButton 
-                                    value="Evening"
-                                    sx={{
-                                        width: 150,
-                                        backgroundColor: 'white',
-                                        border: '3px solid #99e6ff'
-                                    }}>
-                                    <NightlightRoundIcon />
-                                    Evening
-                                </ToggleButton>
-                                <Divider orientation="vertical" flexItem />
-                                <ToggleButton 
-                                    value="Matinee"
-                                    sx={{
-                                        width: 150,
-                                        backgroundColor: 'white',
-                                        border: '3px solid #99e6ff'
-                                    }}>
-                                    <SunnyIcon />
-                                    Matinee
-                                </ToggleButton>
-                            </ToggleButtonGroup>
-                             {/* <ToggleButtonGroup 
-                                value={categories}
-                                exclusive
-                                size='medium'
-                                onChange={changeCategories}    
-                            >
-                                <ToggleButton 
-                                    value="Broadway"
-                                    sx={{
-                                        width: 150,
-                                        backgroundColor: 'white',
-                                        border: '3px solid #99e6ff'
-                                    }}>
-                                    <NightlightRoundIcon />
-                                    Broadway
-                                </ToggleButton>
-                                <Divider orientation="vertical" flexItem />
-                                <ToggleButton 
-                                    value="Off-Broadway"
-                                    sx={{
-                                        width: 150,
-                                        backgroundColor: 'white',
-                                        border: '3px solid #99e6ff'
-                                    }}>
-                                    <SunnyIcon />
-                                    Off-Brdwy
-                                </ToggleButton>
-                            </ToggleButtonGroup> */}
-                        </Grid>
+                    <MainFilters categories={categories} times={times} date={date} selectedShows={selectedShows}
+                        updateCategoriesFunction={changeCategories} selectedShowIconClickHandler={handleIconClick}
+                        updateTimesFunction={changeTimes} ></MainFilters>
 
-                        <Grid size={2} sx={{
-                            textAlign: 'right'
-                        }}>
-                            <div className="categories">Date</div>
-                        </Grid>
-                        <Grid size={10} sx={{
-                            textAlign: 'left'
-                        }}>
-                            <ToggleButtonGroup
-                                value={date}
-                                exclusive
-                                size='medium'
-                                sx={{ mr: '2'}}>
-                                <ToggleButton
-                                    value="Today"
-                                    sx={{
-                                        backgroundColor: 'white', 
-                                        border: '3px solid #99e6ff'
-                                    }}>
-                                    <PriorityHighIcon />
-                                    Today
-                                </ToggleButton>
-                                <Divider orientation="vertical" flexItem />
-                                <ToggleButton
-                                    value="Tomorrow"
-                                    sx={{
-                                        backgroundColor: 'white', 
-                                        border: '3px solid #99e6ff'
-                                    }}>
-                                    <UpdateIcon />
-                                    Tomorrow
-                                </ToggleButton>
-                                <Divider orientation="vertical" flexItem />
-                                <ToggleButton
-                                    value="This Weekend"
-                                    sx={{
-                                        backgroundColor: 'white', 
-                                        border: '3px solid #99e6ff'
-                                    }}>
-                                    <DateRangeIcon />
-                                    This Weekend
-                                </ToggleButton>
-                                <Divider orientation="vertical" flexItem />
-                                <ToggleButton
-                                    value="Select Date"
-                                    sx={{
-                                        backgroundColor: 'white', 
-                                        border: '3px solid #99e6ff'
-                                    }}>
-                                        <CalendarMonthIcon />
-                                        Select Date
-                                </ToggleButton>
-
-                            </ToggleButtonGroup>
-                        </Grid>
-
-                        { /* Visible only if there are shows selected from the search bar  */}
-                        <Grid size={2} sx={{
-                            textAlign: 'right'
-                        }}> 
-                            <div className="categories">Shows Selected</div>
-                        </Grid>
-                        <Grid size={10}>
-                            <Stack spacing={2} direction="row">
-                                {selectedShows.map((show) => (
-                                    <Button variant='contained' endIcon={<ClearIcon id={show?.name} onClick={handleIconClick} />}>{show?.name}</Button>
-                                ))}
-                            </Stack>
-                        </Grid>
-                    </Grid>
                 </Box>
-                
 
                 {/* // Main Price Grid - 40% + 20% of padding */}
-                <Box sx={{
-                    height: '40vh',
-                    backgroundColor: '#e6e6e6',
-                    paddingTop: '20vh',
-                }}>
-                    <Grid container spacing={0.2}>
-                        <Grid size={0.5}></Grid>
-                        <Grid size={11}>
-                            <DataGrid rows={rows} columns={cols}/>
-                        </Grid>
-                        <Grid size={0.5}></Grid>
-                    </Grid>
-                </Box>
+                <MainTable rows={rows} cols={cols}></MainTable>
 
                 {/* // Footer - 10%  */}
                 <Box sx={{
