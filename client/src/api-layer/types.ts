@@ -2,15 +2,18 @@
 
 export interface ShowInfo {
     id: number;
-    name: string; 
+    show_name: string; 
     venue: string;
+    address: string;
     website: string; 
     type: ShowType;
+    level: ShowLevel;
     runtime: number; 
     // poster: image 
     opening_date: Date; 
     closing_date: Date; 
-    closed: boolean; 
+    closed?: boolean; 
+    display: boolean; 
 }
 
 export interface ShowPrice {

@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import AllShows from "../AllShows/AllShows";
-import Main from "../../components/Main/Main";
+import Main from "../Main/Main";
 
 
 

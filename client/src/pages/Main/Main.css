@@ -1,0 +1,45 @@
+.side-box {
+    background-color: red;
+    height: 100vh;
+    display: inline;
+}
+
+.main-box {
+    background-color: red;
+    height: 100vh;
+    display: inline;
+}
+
+.def-text {
+    /* font-family: sans-serif; */
+    margin: auto;
+}
+
+#root {
+    width: 100%;
+}
+
+.page-background {
+    
+    /* width: 1512px; */
+    /* width: 100%; */
+    /* padding-right: 1%;
+    padding-left: 1%; */
+    /* height: 100vh; */
+}
+
+.categories {
+    vertical-align: left;
+    font-size: x-large;
+    text-decoration: underline;
+}
+
+.tagline-box {
+    text-align: center;
+    padding-right: 30%;
+    padding-left: 30%;
+}
+.tagline {
+    font-size: 2.5em;
+}
+

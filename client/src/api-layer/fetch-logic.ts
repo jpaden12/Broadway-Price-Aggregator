@@ -16,14 +16,23 @@ export async function fetchPriceListings(shows: string[], sites: string[]): Prom
 
 export async function getListings() {
     useEffect(() => {
-        await fetch("")
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
-            })
-    });
+        const listings = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/api/all-price-listings', {
+                    method: "GET", 
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                }); 
+                const result = await response.json();
+                console.log(result);
+            } catch (err) {
+                console.error("Error fetching data:", err);
+            }
+        }
+        listings()
+    }, []);
 }
-
 
 
 async function getCheapestPrice(showId: string): Promise<PriceListing[]> {
