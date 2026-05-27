@@ -68,7 +68,7 @@ export class ShowInfoService {
             closing_date: body['closing_date'] ?? show.closing_date,
             closed: body['closed'] ?? show.closed,
             display: body['display'] ?? show.display,
-            type: ShowType.MUSICAL
+            type: body['type'] ?? show.type
         };
 
         wrap(show).assign(updatedShow);

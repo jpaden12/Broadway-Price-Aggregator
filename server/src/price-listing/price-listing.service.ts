@@ -80,8 +80,6 @@ export class PriceListingService {
                 })
                 .execute('all');
         return query;
-        ;
-        // return this.priceListingRepository.findAll();
     }
 
     async getPriceListing(id: number): Promise<PriceListing | null> {
